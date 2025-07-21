@@ -1,0 +1,3 @@
+# Certifcate and key files
+*.crt
+*.key

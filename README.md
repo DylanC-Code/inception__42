@@ -47,7 +47,7 @@ Puis accédez au site via : `https://<login>.42.fr`
 
 ---
 
-## Arborescense
+## Arborescence
 
 ```css
 .
