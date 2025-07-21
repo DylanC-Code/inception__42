@@ -22,6 +22,32 @@ Chaque service tourne dans un container dédié avec TLS, volumes, réseau et va
 - ⚙️ Makefile pour automatiser le build
 - 🔒 Utilisation de `.env` et `Docker secrets`
 
+---
+
+## Structure de configuration
+
+### 🔧 `.env` (dans `srcs/`)
+
+Ce fichier définit certaines variables d’environnement utilisées à la création des services :
+```env
+MYSQL_DATABASE=<db_name>
+MYSQL_USER=<user>
+```
+
+### 🔐 Secrets
+
+Deux types de secrets sont utilisés :
+
+- Dossier `srcs/secrets/` à la racine :
+  - `db_password` → mot de passe de l'utilisateur `MYSQL_USER`
+
+- Dossier `srcs/mariadb/secrets/` :
+  - `db_root_password` → mot de passe du compte `root` MariaDB
+
+Ces secrets sont injectés automatiquement dans les conteneurs via la directive `secrets:` du `docker-compose.yml`.
+
+---
+
 ## Bonus possibles
 
 - Redis pour le cache WordPress
@@ -41,7 +67,7 @@ Chaque service tourne dans un container dédié avec TLS, volumes, réseau et va
 ## Lancement
 
 ```bash
-make
+make up
 ```
 Puis accédez au site via : `https://<login>.42.fr`
 
@@ -52,14 +78,15 @@ Puis accédez au site via : `https://<login>.42.fr`
 ```css
 .
 ├── Makefile
-├── secrets/
 ├── srcs/
-│   ├── .env
-│   ├── docker-compose.yml
-│   └── requirements/
-│       ├── nginx/
-│       ├── wordpress/
-│       └── mariadb/
+    ├── .env
+    ├── docker-compose.yml
+    ├── secrets/
+    ├── nginx/
+    ├── wordpress/
+    └── mariadb/
+        └── secrets/
+            └── db_root_password
 ```
 
 ---
