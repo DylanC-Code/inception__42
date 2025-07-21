@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+set -eu
 
 # Lire les secrets (s'ils existent)
 if [ -f /run/secrets/db_root_password ]; then
@@ -30,7 +30,7 @@ if [ ! -d "$DB_DIR/mysql" ]; then
 FLUSH PRIVILEGES;
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
 CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${MYSQL_USER_PASSWORD}';
+CREATE OR REPLACE USER '${DB_USER}'@'%' IDENTIFIED BY '${MYSQL_USER_PASSWORD}';
 GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%';
 FLUSH PRIVILEGES;
 EOF

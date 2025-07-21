@@ -20,6 +20,7 @@ services:
       - 9000:9000
     env_file: .env
     secrets:
+      - wp_admin_password
       - db_password
     networks:
       - inception
@@ -74,3 +75,6 @@ secrets:
 
   db_password:
     file: ./secrets/db_password
+
+  wp_admin_password:
+    file: ./wordpress/secrets/wp_admin_password

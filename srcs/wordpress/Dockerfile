@@ -25,18 +25,21 @@ RUN apk update && \
     openrc \
     supervisor
 
-RUN curl -O https://wordpress.org/latest.tar.gz && \
-    tar -xzf latest.tar.gz && \
-    mv wordpress /var/www/ && \
-    rm latest.tar.gz
+RUN ln -s /usr/bin/php82 /usr/bin/php
 
-COPY ./setup.sh /usr/local/bin/setup.sh
-RUN chmod +x /usr/local/bin/setup.sh
+RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x /usr/local/bin/wp
+# RUN curl -O https://wordpress.org/latest.tar.gz && \
+#     tar -xzf latest.tar.gz && \
+#     mv wordpress /var/www/ && \
+#     rm latest.tar.gz
+
+COPY ./php.ini /etc/php82/php.ini
+COPY ./entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 9000
 
 WORKDIR /var/www/
 
-RUN /usr/local/bin/setup.sh
-
-CMD ["php-fpm82", "--nodaemonize"]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]

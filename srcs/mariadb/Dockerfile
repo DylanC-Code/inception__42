@@ -19,4 +19,4 @@ EXPOSE 3306
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
 
-CMD ["mysqld", "--user=mysql", "--datadir=/var/lib/mysql"]
+# CMD ["mysqld", "--user=mysql", "--datadir=/var/lib/mysql"]

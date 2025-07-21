@@ -6,7 +6,7 @@
 #    By: dcastor <dcastor@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/21 10:04:02 by dcastor           #+#    #+#              #
-#    Updated: 2025/07/21 15:32:34 by dcastor          ###   ########.fr        #
+#    Updated: 2025/07/21 22:24:48 by dcastor          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,9 @@ DOCKER_COMPOSE = docker compose -f srcs/docker-compose.yml
 
 up: crt
 	docker compose -f srcs/docker-compose.yml up -d --build
+	
+up-force: crt
+	docker compose -f srcs/docker-compose.yml up -d --build --force-recreate
 
 crt:
 	@mkdir -p srcs/nginx/certs
