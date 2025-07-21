@@ -1,8 +1,7 @@
 services:
   nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
+    build: ./nginx
+    container_name: nginx_inception
     restart: always
     ports:
       - 443:443
@@ -14,19 +13,57 @@ services:
       - wordpress
 
   wordpress:
-    build:
-      context: ./wordpress
-      dockerfile: Dockerfile
-      no_cache: true
+    build: ./wordpress
+    container_name: wordpress_inception
+    restart: always
     ports:
       - 9000:9000
     environment:
-      - MARIADB_HOST=mariadb
+      - MYSQL_ROOT_PASSWORD=root_password
       - MARIADB_DATABASE=wordpress
       - MARIADB_USER=wordpress_user
       - MARIADB_PASSWORD=wordpress_password
+      - MARIADB_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress_user
+      - MYSQL_PASSWORD=wordpress_password
     networks:
       - inception
+    depends_on:
+      - mariadb
+    
+  mariadb:
+    build: ./mariadb
+    container_name: mariadb_inception
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MARIADB_DATABASE=wordpress
+      - MARIADB_USER=wordpress_user
+      - MARIADB_PASSWORD=wordpress_password
+      - MARIADB_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress_user
+      - MYSQL_PASSWORD=wordpress_password
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - inception
+  
+  adminer:
+    build: ./adminer
+    container_name: adminer_inception
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - inception
+    environment:
+      - ADMINER_DEFAULT_SERVER=mariadb_inception
+    depends_on:
+      - mariadb
     
 
 networks:
@@ -41,3 +78,5 @@ volumes:
       type: none
       device: ./nginx/certs/
       o: bind
+
+  mariadb_data:
