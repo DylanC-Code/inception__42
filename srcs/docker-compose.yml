@@ -3,22 +3,30 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
+    restart: always
     ports:
       - 443:443
     volumes:
-      - nginx_certs:/etc/nginx/certs:ro
+      - nginx_certs:/etc/nginx/ssl/:ro
     networks:
       - inception
+    depends_on:
+      - wordpress
 
-  # wordpress:
-  #   build:
-  #     context: ./wordpress
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 8080:80
-
-  #   networks:
-  #     - inception
+  wordpress:
+    build:
+      context: ./wordpress
+      dockerfile: Dockerfile
+      no_cache: true
+    ports:
+      - 9000:9000
+    environment:
+      - MARIADB_HOST=mariadb
+      - MARIADB_DATABASE=wordpress
+      - MARIADB_USER=wordpress_user
+      - MARIADB_PASSWORD=wordpress_password
+    networks:
+      - inception
     
 
 networks:
