@@ -5,7 +5,6 @@ RUN apk update && \
     apk add --no-cache nginx openssl
 
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
-COPY ./tools/ssl /etc/nginx/ssl
 
 EXPOSE 443
 
