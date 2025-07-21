@@ -18,15 +18,9 @@ services:
     restart: always
     ports:
       - 9000:9000
-    environment:
-      - MYSQL_ROOT_PASSWORD=root_password
-      - MARIADB_DATABASE=wordpress
-      - MARIADB_USER=wordpress_user
-      - MARIADB_PASSWORD=wordpress_password
-      - MARIADB_ROOT_PASSWORD=root_password
-      - MYSQL_DATABASE=wordpress
-      - MYSQL_USER=wordpress_user
-      - MYSQL_PASSWORD=wordpress_password
+    env_file: .env
+    secrets:
+      - db_password
     networks:
       - inception
     depends_on:
@@ -35,18 +29,12 @@ services:
   mariadb:
     build: ./mariadb
     container_name: mariadb_inception
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=root_password
-      - MARIADB_DATABASE=wordpress
-      - MARIADB_USER=wordpress_user
-      - MARIADB_PASSWORD=wordpress_password
-      - MARIADB_ROOT_PASSWORD=root_password
-      - MYSQL_DATABASE=wordpress
-      - MYSQL_USER=wordpress_user
-      - MYSQL_PASSWORD=wordpress_password
+    env_file: .env
     volumes:
       - mariadb_data:/var/lib/mysql
+    secrets:
+      - db_root_password
+      - db_password
     ports:
       - 3306:3306
     networks:
@@ -63,8 +51,7 @@ services:
     environment:
       - ADMINER_DEFAULT_SERVER=mariadb_inception
     depends_on:
-      - mariadb
-    
+      - mariadb  
 
 networks:
   inception:
@@ -80,3 +67,10 @@ volumes:
       o: bind
 
   mariadb_data:
+
+secrets:
+  db_root_password:
+    file: ./mariadb/secrets/db_root_password
+
+  db_password:
+    file: ./secrets/db_password
