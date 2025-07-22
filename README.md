@@ -30,6 +30,7 @@ Chaque service tourne dans un container dédié avec TLS, volumes, réseau et va
 
 Ce fichier définit certaines variables d’environnement utilisées à la création des services :
 ```env
+DOMAIN_NAME=<domain>
 MYSQL_DATABASE=<db_name>
 MYSQL_USER=<user>
 ```
@@ -43,6 +44,9 @@ Deux types de secrets sont utilisés :
 
 - Dossier `srcs/mariadb/secrets/` :
   - `db_root_password` → mot de passe du compte `root` MariaDB
+
+- Dossier `srcs/wordpress/secrets/` :
+  - `wp_admin_password` → mot de passe du compte `root` WordPress
 
 Ces secrets sont injectés automatiquement dans les conteneurs via la directive `secrets:` du `docker-compose.yml`.
 

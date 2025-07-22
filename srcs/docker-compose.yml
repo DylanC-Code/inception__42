@@ -1,12 +1,14 @@
 services:
   nginx:
     build: ./nginx
-    container_name: nginx_inception
+    container_name: nginx
     restart: always
     ports:
-      - 443:443
+      # - 443:443
+      - 4443:4443
     volumes:
       - nginx_certs:/etc/nginx/ssl/:ro
+      - wordpress_data:/var/www
     networks:
       - inception
     depends_on:
@@ -14,11 +16,14 @@ services:
 
   wordpress:
     build: ./wordpress
-    container_name: wordpress_inception
+    container_name: wordpress
     restart: always
     ports:
       - 9000:9000
+      - 8000:8000
     env_file: .env
+    volumes:
+      - wordpress_data:/var/www
     secrets:
       - wp_admin_password
       - db_password
@@ -29,7 +34,7 @@ services:
     
   mariadb:
     build: ./mariadb
-    container_name: mariadb_inception
+    container_name: mariadb
     env_file: .env
     volumes:
       - mariadb_data:/var/lib/mysql
@@ -43,14 +48,14 @@ services:
   
   adminer:
     build: ./adminer
-    container_name: adminer_inception
+    container_name: adminer
     restart: always
     ports:
       - 8080:8080
     networks:
       - inception
     environment:
-      - ADMINER_DEFAULT_SERVER=mariadb_inception
+      - ADMINER_DEFAULT_SERVER=mariadb
     depends_on:
       - mariadb  
 
@@ -68,6 +73,7 @@ volumes:
       o: bind
 
   mariadb_data:
+  wordpress_data:
 
 secrets:
   db_root_password:

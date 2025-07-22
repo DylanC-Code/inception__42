@@ -2,7 +2,7 @@
 set -e
 
 # Variables d’environnement par défaut
-DB_HOST=${DB_HOST:-mariadb_inception}
+DB_HOST=${DB_HOST:-mariadb}
 DB_NAME=${MYSQL_DATABASE:-wordpress}
 DB_USER=${MYSQL_USER:-wp_user}
 DB_PASSWORD=$(cat /run/secrets/db_password)
@@ -31,4 +31,6 @@ else
     echo "[INFO] WordPress déjà installé."
 fi
 
-exec php-fpm82 -F
+# exec php-fpm82 -F
+exec sleep infinity
+# exec php -S 0.0.0.0:8000 -t /var/www

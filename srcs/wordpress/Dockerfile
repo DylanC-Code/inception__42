@@ -3,6 +3,7 @@ FROM alpine:3.20
 RUN apk update && \ 
     apk upgrade && \
     apk add --no-cache \
+    iproute2-ss \
     php82 \
     php82-fpm \
     php82-mysqli \
@@ -25,20 +26,18 @@ RUN apk update && \
     openrc \
     supervisor
 
-RUN ln -s /usr/bin/php82 /usr/bin/php
+RUN ln -s /usr/bin/php82 /usr/bin/php && \
+    sed -i 's|^listen = .*|listen = 9000|' /etc/php82/php-fpm.d/www.conf
 
 RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x /usr/local/bin/wp
-# RUN curl -O https://wordpress.org/latest.tar.gz && \
-#     tar -xzf latest.tar.gz && \
-#     mv wordpress /var/www/ && \
-#     rm latest.tar.gz
 
 COPY ./php.ini /etc/php82/php.ini
 COPY ./entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 9000
+EXPOSE 8000
 
 WORKDIR /var/www/
 
