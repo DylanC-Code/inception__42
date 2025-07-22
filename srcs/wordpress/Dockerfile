@@ -37,7 +37,6 @@ COPY ./entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 9000
-EXPOSE 8000
 
 WORKDIR /var/www/
 

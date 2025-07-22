@@ -31,6 +31,4 @@ else
     echo "[INFO] WordPress déjà installé."
 fi
 
-# exec php-fpm82 -F
-exec sleep infinity
-# exec php -S 0.0.0.0:8000 -t /var/www
+exec php-fpm82 -F
