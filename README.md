@@ -41,6 +41,7 @@ Deux types de secrets sont utilisés :
 
 - Dossier `srcs/secrets/` à la racine :
   - `db_password` → mot de passe de l'utilisateur `MYSQL_USER`
+  - `ftp_password` → mot de passe de l'utilisateur `ftpuser`
 
 - Dossier `srcs/mariadb/secrets/` :
   - `db_root_password` → mot de passe du compte `root` MariaDB

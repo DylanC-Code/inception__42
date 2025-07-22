@@ -43,6 +43,23 @@ services:
     networks:
       - inception
   
+  ftp:
+    build: ./ftp
+    container_name: ftp
+    restart: always
+    ports:
+      - "21:21"
+      - "21100-21110:21100-21110"
+    env_file: .env
+    secrets:
+      - ftp_password
+    volumes:
+      - wordpress_data:/home/ftpuser/
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+
   adminer:
     build: ./adminer
     container_name: adminer
@@ -81,3 +98,6 @@ secrets:
 
   wp_admin_password:
     file: ./wordpress/secrets/wp_admin_password
+
+  ftp_password:
+    file: ./secrets/ftp_password
