@@ -8,7 +8,8 @@ RUN apk update && \
     curl
 
 COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./proxy_params /etc/nginx/proxy_params
 
-EXPOSE 443 4443
+EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]

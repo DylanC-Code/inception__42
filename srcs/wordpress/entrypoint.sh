@@ -2,7 +2,7 @@
 set -e
 
 # Variables d’environnement par défaut
-DOMAIN_NAME=${DOMAIN_NAME:-localhost}
+DOMAIN_NAME=${DOMAIN_NAME:-dcastor.42.fr}
 DB_HOST=${DB_HOST:-mariadb}
 DB_NAME=${MYSQL_DATABASE:-wordpress}
 DB_USER=${MYSQL_USER:-wp_user}
@@ -26,8 +26,8 @@ if [ ! -f wp-config.php ]; then
 
     echo "[INFO] Ajout des constantes personnalisées..."
 
-    wp config set WP_HOME "https://${DOMAIN_NAME}:4443" --type=constant --allow-root
-    wp config set WP_SITEURL "https://${DOMAIN_NAME}:4443" --type=constant --allow-root
+    wp config set WP_HOME "https://${DOMAIN_NAME}" --type=constant --allow-root
+    wp config set WP_SITEURL "https://${DOMAIN_NAME}" --type=constant --allow-root
 
     wp config set WP_REDIS_HOST "redis" --type=constant --allow-root
     wp config set WP_REDIS_PORT 6379 --type=constant --raw --allow-root
@@ -39,9 +39,15 @@ if [ ! -f wp-config.php ]; then
     wp config set WP_DEBUG true --type=constant --raw --allow-root
     wp config set WP_DEBUG_LOG true --type=constant --raw --allow-root
 
+    echo "
+if (isset(\$_SERVER['HTTP_X_FORWARDED_PROTO']) && \$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+    \$_SERVER['HTTPS'] = 'on';
+}
+" >> wp-config.php
+
     echo "[INFO] Installation de WordPress..."
     wp core install --allow-root \
-        --url="https://${DOMAIN_NAME}:4443" \
+        --url="https://${DOMAIN_NAME}" \
         --title="Inception 42" \
         --admin_user="$ADMIN_USER" \
         --admin_password="$ADMIN_PASSWORD" \

@@ -11,4 +11,4 @@ else
     echo "[WARN] Secret non trouvé à $SECRET_PATH, mot de passe par défaut utilisé."
 fi
 
-exec code-server --bind-addr 0.0.0.0:8443
+exec code-server --bind-addr 0.0.0.0:8443 --proxy-domain code.dcastor.42.fr

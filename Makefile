@@ -6,7 +6,7 @@
 #    By: dcastor <dcastor@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/21 10:04:02 by dcastor           #+#    #+#              #
-#    Updated: 2025/07/23 19:25:50 by dcastor          ###   ########.fr        #
+#    Updated: 2025/07/23 20:21:25 by dcastor          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,5 +51,11 @@ setup-hosts:
 			echo "[SKIP] Déjà présent: $$entry"; \
 		fi \
 	done
+
+clean:
+	@docker stop $(docker ps -qa)
+	@docker rm $(docker ps -qa) 
+	@docker rmi -f $(docker images -qa) 
+	@docker volume rm $(docker volume ls -q)
 
 .PHONY: up crt volumes up-force setup-hosts

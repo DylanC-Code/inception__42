@@ -5,8 +5,7 @@ services:
     container_name: nginx
     restart: always
     ports:
-      # - 443:443
-      - 4443:4443
+      - 443:443
     volumes:
       - nginx_certs:/etc/nginx/ssl/:ro
       - wordpress_data:/var/www
@@ -76,8 +75,6 @@ services:
     image: adminer
     container_name: adminer
     restart: always
-    # ports:
-    #   - 8080:8080
     networks:
       - inception
     environment:
@@ -92,8 +89,6 @@ services:
     restart: always
     volumes:
       - vitrine_data:/var/www/
-    # ports:
-    #   - 4173:4173
     networks:
       - inception
     depends_on:
@@ -107,8 +102,6 @@ services:
     volumes:
       - wordpress_data:/var/www/wordpress
       - vitrine_data:/var/www/vitrine
-    # ports:
-    #   - 8443:8443
     secrets:
       - code_password
     networks:
