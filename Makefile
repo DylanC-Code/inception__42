@@ -6,16 +6,16 @@
 #    By: dcastor <dcastor@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/21 10:04:02 by dcastor           #+#    #+#              #
-#    Updated: 2025/07/21 22:24:48 by dcastor          ###   ########.fr        #
+#    Updated: 2025/07/23 19:25:50 by dcastor          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 DOCKER_COMPOSE = docker compose -f srcs/docker-compose.yml
 
-up: crt
+up: crt volumes setup-hosts
 	docker compose -f srcs/docker-compose.yml up -d --build
 	
-up-force: crt
+up-force: crt volumes setup-hosts
 	docker compose -f srcs/docker-compose.yml up -d --build --force-recreate
 
 crt:
@@ -29,4 +29,27 @@ crt:
 		-subj "/C=FR/ST=France/L=Paris/O=42/Inception/CN=dcastor.42.fr"; \
 	fi
 
-.PHONY: up crt
+volumes:
+	@mkdir -p ~/data/mariadb_data
+	@mkdir -p ~/data/wordpress_data
+	@mkdir -p ~/data/vitrine_data
+
+HOSTS_FILE=/etc/hosts
+HOSTS_ENTRIES=\
+"127.0.0.1   dcastor.42.fr" \
+"127.0.0.1   adminer.dcastor.42.fr" \
+"127.0.0.1   vitrine.dcastor.42.fr" \
+"127.0.0.1   code.dcastor.42.fr"
+
+setup-hosts:
+	@echo "[INFO] Configuration des entrées /etc/hosts..."
+	@for entry in $(HOSTS_ENTRIES); do \
+		if ! grep -q "$$entry" $(HOSTS_FILE); then \
+			echo "$$entry" | sudo tee -a $(HOSTS_FILE) > /dev/null; \
+			echo "[OK] Ajouté: $$entry"; \
+		else \
+			echo "[SKIP] Déjà présent: $$entry"; \
+		fi \
+	done
+
+.PHONY: up crt volumes up-force setup-hosts
