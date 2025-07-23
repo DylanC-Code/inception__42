@@ -49,6 +49,9 @@ Deux types de secrets sont utilisés :
 - Dossier `srcs/wordpress/secrets/` :
   - `wp_admin_password` → mot de passe du compte `root` WordPress
 
+- Dossier `srcs/code/secrets/` :
+  - `code_password` → mot de passe pour la connection au serveur CODE
+
 Ces secrets sont injectés automatiquement dans les conteneurs via la directive `secrets:` du `docker-compose.yml`.
 
 ---
