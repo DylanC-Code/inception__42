@@ -82,6 +82,17 @@ services:
     depends_on:
       - mariadb  
 
+  vitrine:
+    build: ./vitrine
+    container_name: vitrine
+    restart: always
+    ports:
+      - 4173:4173
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+
 networks:
   inception:
     name: inception_network
