@@ -47,6 +47,7 @@ Deux types de secrets sont utilisés :
   - `db_root_password` → mot de passe du compte `root` MariaDB
 
 - Dossier `srcs/wordpress/secrets/` :
+  - `wp_admin_user` → nom du compte `root` WordPress
   - `wp_admin_password` → mot de passe du compte `root` WordPress
 
 - Dossier `srcs/code/secrets/` :

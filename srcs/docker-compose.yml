@@ -1,6 +1,7 @@
 services:
   nginx:
     build: ./nginx
+    image: nginx
     container_name: nginx
     restart: always
     ports:
@@ -16,6 +17,7 @@ services:
 
   wordpress:
     build: ./wordpress
+    image: wordpress
     container_name: wordpress
     restart: always
     env_file: .env
@@ -23,6 +25,7 @@ services:
       - wordpress_data:/var/www
     secrets:
       - wp_admin_password
+      - wp_admin_user
       - db_password
     networks:
       - inception
@@ -31,6 +34,7 @@ services:
     
   mariadb:
     build: ./mariadb
+    image: mariadb
     container_name: mariadb
     env_file: .env
     volumes:
@@ -38,13 +42,12 @@ services:
     secrets:
       - db_root_password
       - db_password
-    ports:
-      - 3306:3306
     networks:
       - inception
   
   ftp:
     build: ./ftp
+    image: ftp
     container_name: ftp
     restart: always
     ports:
@@ -62,19 +65,19 @@ services:
 
   redis:
     build: ./redis
+    image: redis
     container_name: redis
     restart: always
-    ports:
-      - 6379:6379
     networks:
       - inception
 
   adminer:
     build: ./adminer
+    image: adminer
     container_name: adminer
     restart: always
-    ports:
-      - 8080:8080
+    # ports:
+    #   - 8080:8080
     networks:
       - inception
     environment:
@@ -84,12 +87,13 @@ services:
 
   vitrine:
     build: ./vitrine
+    image: vitrine
     container_name: vitrine
     restart: always
     volumes:
       - vitrine_data:/var/www/
-    ports:
-      - 4173:4173
+    # ports:
+    #   - 4173:4173
     networks:
       - inception
     depends_on:
@@ -97,13 +101,14 @@ services:
 
   code:
     build: ./code
+    image: code
     container_name: code
     restart: always
     volumes:
       - wordpress_data:/var/www/wordpress
       - vitrine_data:/var/www/vitrine
-    ports:
-      - 8443:8443
+    # ports:
+    #   - 8443:8443
     secrets:
       - code_password
     networks:
@@ -135,6 +140,9 @@ secrets:
 
   wp_admin_password:
     file: ./wordpress/secrets/wp_admin_password
+
+  wp_admin_user:
+    file: ./wordpress/secrets/wp_admin_user
 
   ftp_password:
     file: ./secrets/ftp_password
