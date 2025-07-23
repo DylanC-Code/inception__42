@@ -86,12 +86,28 @@ services:
     build: ./vitrine
     container_name: vitrine
     restart: always
+    volumes:
+      - vitrine_data:/var/www/
     ports:
       - 4173:4173
     networks:
       - inception
     depends_on:
       - wordpress
+
+  code:
+    build: ./code
+    container_name: code
+    restart: always
+    volumes:
+      - wordpress_data:/var/www/wordpress
+      - vitrine_data:/var/www/vitrine
+    ports:
+      - 8443:8443
+    secrets:
+      - code_password
+    networks:
+      - inception
 
 networks:
   inception:
@@ -108,6 +124,7 @@ volumes:
 
   mariadb_data:
   wordpress_data:
+  vitrine_data:
 
 secrets:
   db_root_password:
@@ -121,3 +138,6 @@ secrets:
 
   ftp_password:
     file: ./secrets/ftp_password
+
+  code_password:
+    file: ./code/secrets/code_password
