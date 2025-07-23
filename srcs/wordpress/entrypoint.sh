@@ -2,10 +2,13 @@
 set -e
 
 # Variables d’environnement par défaut
+DOMAIN_NAME=${DOMAIN_NAME:-localhost}
 DB_HOST=${DB_HOST:-mariadb}
 DB_NAME=${MYSQL_DATABASE:-wordpress}
 DB_USER=${MYSQL_USER:-wp_user}
 DB_PASSWORD=$(cat /run/secrets/db_password)
+ADMIN_USER=$(cat /run/secrets/wp_admin_user)
+ADMIN_PASSWORD=$(cat /run/secrets/wp_admin_password)
 
 # Installer WP si nécessaire
 if [ ! -f wp-config.php ]; then
@@ -17,16 +20,32 @@ if [ ! -f wp-config.php ]; then
         --dbname="$DB_NAME" \
         --dbuser="$DB_USER" \
         --dbpass="$DB_PASSWORD" \
-        --dbhost="$DB_HOST"
+        --dbhost="$DB_HOST" \
+        --dbcharset="utf8" \
+        --dbcollate=""
+
+    echo "[INFO] Ajout des constantes personnalisées..."
+
+    wp config set WP_HOME "https://${DOMAIN_NAME}:4443" --type=constant --allow-root
+    wp config set WP_SITEURL "https://${DOMAIN_NAME}:4443" --type=constant --allow-root
+
+    wp config set WP_REDIS_HOST "redis" --type=constant --allow-root
+    wp config set WP_REDIS_PORT 6379 --type=constant --raw --allow-root
+    wp config set WP_REDIS_TIMEOUT 1 --type=constant --raw --allow-root
+    wp config set WP_REDIS_READ_TIMEOUT 1 --type=constant --raw --allow-root
+    wp config set WP_REDIS_DISABLED false --type=constant --raw --allow-root
+    wp config set WP_CACHE true --type=constant --raw --allow-root
+
+    wp config set WP_DEBUG true --type=constant --raw --allow-root
+    wp config set WP_DEBUG_LOG true --type=constant --raw --allow-root
 
     echo "[INFO] Installation de WordPress..."
     wp core install --allow-root \
-        --url="https://${DOMAIN_NAME}" \
+        --url="https://${DOMAIN_NAME}:4443" \
         --title="Inception 42" \
-        --admin_user="admin42" \
-        --admin_password="$(cat /run/secrets/wp_admin_password)" \
-        --admin_email="admin@${DOMAIN_NAME}.fr"
-
+        --admin_user="$ADMIN_USER" \
+        --admin_password="$ADMIN_PASSWORD" \
+        --admin_email="${ADMIN_USER}@${DOMAIN_NAME}.fr"
 else
     echo "[INFO] WordPress déjà installé."
 fi
