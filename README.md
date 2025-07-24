@@ -49,6 +49,8 @@ Deux types de secrets sont utilisés :
 - Dossier `srcs/wordpress/secrets/` :
   - `wp_admin_user` → nom du compte `root` WordPress
   - `wp_admin_password` → mot de passe du compte `root` WordPress
+  - `wp_user` → nom de l'utilisateur `secondaire` WordPress
+  - `wp_user_password` → mot de passe de l'utilisateur `secondaire` WordPress
 
 - Dossier `srcs/code/secrets/` :
   - `code_password` → mot de passe pour la connection au serveur CODE

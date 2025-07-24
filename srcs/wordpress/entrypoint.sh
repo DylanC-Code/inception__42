@@ -9,6 +9,8 @@ DB_USER=${MYSQL_USER:-wp_user}
 DB_PASSWORD=$(cat /run/secrets/db_password)
 ADMIN_USER=$(cat /run/secrets/wp_admin_user)
 ADMIN_PASSWORD=$(cat /run/secrets/wp_admin_password)
+WP_USER=$(cat /run/secrets/wp_user)
+WP_USER_PASSWORD=$(cat /run/secrets/wp_user_password)
 
 # Installer WP si nécessaire
 if [ ! -f wp-config.php ]; then
@@ -39,11 +41,11 @@ if [ ! -f wp-config.php ]; then
     wp config set WP_DEBUG true --type=constant --raw --allow-root
     wp config set WP_DEBUG_LOG true --type=constant --raw --allow-root
 
-    echo "
-if (isset(\$_SERVER['HTTP_X_FORWARDED_PROTO']) && \$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
-    \$_SERVER['HTTPS'] = 'on';
-}
-" >> wp-config.php
+#     echo "
+# if (isset(\$_SERVER['HTTP_X_FORWARDED_PROTO']) && \$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+#     \$_SERVER['HTTPS'] = 'on';
+# }
+# " >> wp-config.php
 
     echo "[INFO] Installation de WordPress..."
     wp core install --allow-root \
@@ -52,6 +54,8 @@ if (isset(\$_SERVER['HTTP_X_FORWARDED_PROTO']) && \$_SERVER['HTTP_X_FORWARDED_PR
         --admin_user="$ADMIN_USER" \
         --admin_password="$ADMIN_PASSWORD" \
         --admin_email="${ADMIN_USER}@${DOMAIN_NAME}.fr"
+
+    wp user create ${WP_USER} ${WP_USER}@${DOMAIN_NAME}.fr --role=author --user_pass=${WP_USER_PASSWORD} --allow-root
 else
     echo "[INFO] WordPress déjà installé."
 fi
