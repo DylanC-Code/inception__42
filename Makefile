@@ -6,7 +6,7 @@
 #    By: dcastor <dcastor@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/21 10:04:02 by dcastor           #+#    #+#              #
-#    Updated: 2025/07/23 20:21:25 by dcastor          ###   ########.fr        #
+#    Updated: 2025/07/24 10:53:06 by dcastor          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,9 +30,9 @@ crt:
 	fi
 
 volumes:
-	@mkdir -p ~/data/mariadb_data
-	@mkdir -p ~/data/wordpress_data
-	@mkdir -p ~/data/vitrine_data
+	@mkdir -p ~/data/mariadb
+	@mkdir -p ~/data/wordpress
+	@mkdir -p ~/data/vitrine
 
 HOSTS_FILE=/etc/hosts
 HOSTS_ENTRIES=\
