@@ -37,6 +37,7 @@ services:
   mariadb:
     build: ./mariadb
     image: mariadb
+    restart: always
     container_name: mariadb
     env_file: .env
     volumes:
